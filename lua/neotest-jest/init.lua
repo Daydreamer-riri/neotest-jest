@@ -266,6 +266,23 @@ local function escapeTestPattern(s)
       :gsub("%'", "%\\'")
   )
 end
+local function escapeTestPatternForPath(s)
+  return (
+    s:gsub("%(", "%\\(")
+      :gsub("%)", "%\\)")
+      :gsub("%]", "%\\]")
+      :gsub("%[", "%\\[")
+      :gsub("%{", "%\\{")
+      :gsub("%}", "%\\}")
+      :gsub("%*", "%\\*")
+      :gsub("%+", "%\\+")
+      :gsub("%-", "%\\-")
+      :gsub("%?", "%\\?")
+      :gsub("%$", "%\\$")
+      :gsub("%^", "%\\^")
+      :gsub("%'", "%\\'")
+  )
+end
 
 local function get_default_strategy_config(strategy, command, cwd)
   local config = {
@@ -419,7 +436,7 @@ function adapter.build_spec(args)
     "--outputFile=" .. results_path,
     "--testNamePattern=" .. testNamePattern,
     "--forceExit",
-    escapeTestPattern(vim.fs.normalize(pos.path)),
+    escapeTestPatternForPath(vim.fs.normalize(pos.path)),
   })
 
   local cwd = getCwd(pos.path)
